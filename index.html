@@ -23,8 +23,9 @@
     if (/MicroMessenger/i.test(ua)) {
       blockedName = '微信';
       isWechat = true;
-    } else if (/MQQBrowser/i.test(ua)) {
-      blockedName = 'QQ 浏览器';
+    } else if (/MQQBrowser/i.test(ua) || /\bQQ\//i.test(ua)) {
+      // MQQBrowser = QQ浏览器，QQ/ = QQ聊天内置浏览器
+      blockedName = 'QQ';
     } else if (/baiduboxapp/i.test(ua)) {
       blockedName = '百度浏览器';
     }
