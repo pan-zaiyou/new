@@ -17,12 +17,19 @@
   <!-- 微信、QQ、百度浏览器拦截 -->
   <script>
     var ua = navigator.userAgent;
-    var isBlocked = /MicroMessenger/i.test(ua)   // 微信
-                 || /MQQBrowser/i.test(ua)        // QQ 浏览器
-                 || /baiduboxapp/i.test(ua);      // 百度浏览器
+    var blockedName = null;
+    var isWechat = false;
 
-    if (isBlocked) {
-      // 阻止 Crisp 加载
+    if (/MicroMessenger/i.test(ua)) {
+      blockedName = '微信';
+      isWechat = true;
+    } else if (/MQQBrowser/i.test(ua)) {
+      blockedName = 'QQ 浏览器';
+    } else if (/baiduboxapp/i.test(ua)) {
+      blockedName = '百度浏览器';
+    }
+
+    if (blockedName) {
       window.$crisp = [];
       window.CRISP_WEBSITE_ID = "";
 
@@ -78,17 +85,20 @@
         `;
         document.head.appendChild(style);
 
+        var guide = isWechat
+          ? `<p>请使用 Safari 或 Chrome 等系统浏览器访问<br>点击右上角 <strong>···</strong> 菜单<br>选择「在浏览器中打开」</p>`
+          : `<p>请使用 Safari 或 Chrome 等系统浏览器访问</p>`;
+
         document.body.innerHTML = `
           <div class="wechat-block">
             <div class="icon">📵</div>
-            <h2>暂不支持此浏览器打开</h2>
+            <h2>暂不支持` + blockedName + `打开</h2>
             <div class="divider"></div>
-            <p>请使用 Safari 或 Chrome<br>等外部浏览器访问</p>
+            ` + guide + `
           </div>
         `;
       });
     } else {
-      // 非受限浏览器正常加载 Crisp
       window.$crisp = [];
       window.CRISP_WEBSITE_ID = "0d31a6be-2276-432f-bd47-ac8d962e84ae";
       (function () {
